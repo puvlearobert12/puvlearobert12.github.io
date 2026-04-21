@@ -379,6 +379,82 @@
   /* ── ANIMATIONS ── */
   @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none} }
   @keyframes fadeIn { from{opacity:0}to{opacity:1} }
+
+  /* ── MOBILE HAMBURGER ── */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 4px; background: none; border: none;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--text); border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── MEDIA QUERIES ── */
+  @media (max-width: 768px) {
+
+    /* Nav */
+    nav { padding: 16px 24px; }
+    .nav-links {
+      display: none; flex-direction: column; gap: 0;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,10,18,0.98);
+      backdrop-filter: blur(20px);
+      justify-content: center; align-items: center;
+      z-index: 98;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { font-size: 22px; padding: 16px 0; }
+    .hamburger { display: flex; z-index: 99; }
+
+    /* Honest banner */
+    .honest-banner { top: 53px; font-size: 10px; padding: 6px 14px; }
+
+    /* Hero */
+    #hero { padding: 130px 24px 80px; }
+    .hero-name { font-size: clamp(38px, 10vw, 60px); }
+    .hero-title { font-size: 16px; }
+    .hero-desc { font-size: 15px; }
+    .hero-ctas { flex-direction: column; }
+    .btn { justify-content: center; }
+    .hero-scroll { display: none; }
+
+    /* Sections */
+    section { padding: 70px 24px; }
+
+    /* About */
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+
+    /* Skills */
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Exp */
+    .exp-header { flex-direction: column; gap: 12px; }
+    .exp-card { padding: 28px 20px; }
+
+    /* Education */
+    .edu-grid { grid-template-columns: 1fr; }
+
+    /* Projects */
+    .proj-grid { grid-template-columns: 1fr; }
+
+    /* Contact */
+    .contact-grid { grid-template-columns: 1fr 1fr; }
+
+    /* Footer */
+    footer { padding: 24px; font-size: 11px; }
+  }
+
+  @media (max-width: 420px) {
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    .contact-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -386,14 +462,17 @@
 <!-- NAV -->
 <nav>
   <div class="nav-logo">PR<span>.</span>dev</div>
-  <ul class="nav-links">
-    <li><a href="#about">Despre</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#experience">Experiență</a></li>
-    <li><a href="#education">Educație</a></li>
-    <li><a href="#projects">Proiecte</a></li>
-    <li><a href="#contact">Contact</a></li>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" onclick="closeMenu()">Despre</a></li>
+    <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
+    <li><a href="#experience" onclick="closeMenu()">Experiență</a></li>
+    <li><a href="#education" onclick="closeMenu()">Educație</a></li>
+    <li><a href="#projects" onclick="closeMenu()">Proiecte</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- HONEST BANNER -->
@@ -698,6 +777,18 @@
 </footer>
 
 <script>
+// ── HAMBURGER MENU ────────────────────────────────────────
+function toggleMenu() {
+  const nav = document.getElementById('navLinks');
+  const btn = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('navLinks').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
 // ── TYPING EFFECT ──────────────────────────────────────────
 const phrases = [
   'Web Developer',
