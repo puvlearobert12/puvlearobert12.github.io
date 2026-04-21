@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pavel Robert — Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a12;
+    --bg2: #0f0f1e;
+    --card: #13131f;
+    --border: #1e1e32;
+    --accent: #7c3aed;
+    --accent2: #a855f7;
+    --accent3: #06b6d4;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --white: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── HONEST BANNER ── */
+  .honest-banner {
+    background: rgba(124,58,237,0.10);
+    border-bottom: 1px solid rgba(124,58,237,0.2);
+    text-align: center;
+    padding: 7px 20px;
+    font-size: 12px;
+    font-family: 'Fira Code', monospace;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+    position: fixed;
+    top: 61px;
+    left: 0; right: 0;
+    z-index: 99;
+    backdrop-filter: blur(10px);
+  }
+  .honest-banner span { color: var(--accent2); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(10,10,18,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Fira Code', monospace;
+    font-size: 18px; font-weight: 500;
+    color: var(--accent2);
+  }
+  .nav-logo span { color: var(--accent3); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 14px; font-weight: 500; letter-spacing: 0.5px;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px; background: var(--accent2);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 150px 60px 80px;
+    position: relative; overflow: hidden;
+  }
+
+  /* Animated gradient orbs */
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.15;
+    animation: float 8s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .orb1 { width: 500px; height: 500px; background: var(--accent); top: -100px; left: -100px; animation-delay: 0s; }
+  .orb2 { width: 400px; height: 400px; background: var(--accent3); top: 200px; right: -80px; animation-delay: -3s; }
+  .orb3 { width: 300px; height: 300px; background: #ec4899; bottom: -50px; left: 40%; animation-delay: -5s; }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(30px,-30px) scale(1.05); }
+    66% { transform: translate(-20px,20px) scale(0.95); }
+  }
+
+  /* Grid background */
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(124,58,237,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,58,237,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.3);
+    padding: 6px 16px; border-radius: 20px;
+    font-size: 13px; color: var(--accent2);
+    margin-bottom: 28px;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--accent2); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+  .hero-name {
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 800; line-height: 1.05;
+    color: var(--white);
+    animation: fadeInUp 0.6s 0.1s ease both;
+  }
+  .hero-name .highlight {
+    background: linear-gradient(135deg, var(--accent2), var(--accent3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-title {
+    font-family: 'Fira Code', monospace;
+    font-size: 20px; color: var(--accent3);
+    margin-top: 16px; margin-bottom: 24px;
+    animation: fadeInUp 0.6s 0.2s ease both;
+    min-height: 28px;
+  }
+  .cursor { display: inline-block; width: 2px; height: 1em; background: var(--accent3); animation: blink 1s infinite; vertical-align: middle; margin-left: 2px; }
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0} }
+
+  .hero-desc {
+    font-size: 17px; line-height: 1.8; color: var(--muted);
+    max-width: 560px;
+    animation: fadeInUp 0.6s 0.3s ease both;
+  }
+
+  .hero-ctas {
+    display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap;
+    animation: fadeInUp 0.6s 0.4s ease both;
+  }
+  .btn {
+    padding: 14px 28px; border-radius: 10px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.25s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white; border: none;
+    box-shadow: 0 4px 24px rgba(124,58,237,0.4);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,58,237,0.5); }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--accent2); color: var(--accent2); transform: translateY(-2px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--muted); font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    animation: fadeIn 1s 1s ease both;
+  }
+  .scroll-line {
+    width: 1px; height: 50px; background: linear-gradient(to bottom, var(--accent2), transparent);
+    animation: scrollDown 2s infinite;
+  }
+  @keyframes scrollDown { 0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom} }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 60px; }
+  .section-tag {
+    font-family: 'Fira Code', monospace; font-size: 13px;
+    color: var(--accent3); letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.5s;
+  }
+  .section-title {
+    font-size: clamp(32px, 4vw, 48px); font-weight: 800;
+    color: var(--white); line-height: 1.1;
+    margin-bottom: 16px;
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.5s 0.1s;
+  }
+  .section-sub {
+    font-size: 16px; color: var(--muted); max-width: 500px; line-height: 1.7;
+    margin-bottom: 60px;
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.5s 0.2s;
+  }
+  .section-tag.visible, .section-title.visible, .section-sub.visible { opacity:1; transform:none; }
+
+  /* ── ABOUT ── */
+  #about { background: var(--bg2); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .about-text p {
+    color: var(--muted); line-height: 1.9; font-size: 16px; margin-bottom: 20px;
+    opacity: 0; transform: translateX(-20px); transition: all 0.5s;
+  }
+  .about-text p.visible { opacity:1; transform:none; }
+
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px 24px;
+    text-align: center;
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.4s;
+  }
+  .stat-card.visible { opacity:1; transform:none; }
+  .stat-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .stat-num { font-size: 36px; font-weight: 800; color: var(--accent2); margin-bottom: 8px; }
+  .stat-label { font-size: 13px; color: var(--muted); }
+
+  .info-list { list-style: none; margin-top: 32px; display: flex; flex-direction: column; gap: 14px; }
+  .info-list li {
+    display: flex; gap: 14px; align-items: flex-start;
+    color: var(--muted); font-size: 15px;
+    opacity: 0; transform: translateX(-15px); transition: all 0.4s;
+  }
+  .info-list li.visible { opacity:1; transform:none; }
+  .info-list .label { color: var(--accent3); font-weight: 600; min-width: 90px; font-size: 13px; }
+
+  /* ── SKILLS ── */
+  #skills {}
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px;
+  }
+  .skill-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px 20px;
+    text-align: center; cursor: default;
+    transition: all 0.3s;
+    opacity: 0; transform: scale(0.9);
+  }
+  .skill-card.visible { opacity:1; transform:none; }
+  .skill-card:hover {
+    border-color: var(--accent);
+    background: rgba(124,58,237,0.08);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(124,58,237,0.2);
+  }
+  .skill-icon { font-size: 32px; margin-bottom: 12px; }
+  .skill-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .skill-level {
+    font-size: 11px; color: var(--muted);
+    font-family: 'Fira Code', monospace;
+  }
+  .skill-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+  .skill-bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent3));
+    border-radius: 2px; width: 0;
+    transition: width 1s 0.3s ease;
+  }
+
+  /* ── EXPERIENCE ── */
+  #experience { background: var(--bg2); }
+  .exp-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 40px;
+    position: relative; overflow: hidden;
+    opacity: 0; transform: translateY(30px); transition: all 0.5s;
+  }
+  .exp-card.visible { opacity:1; transform:none; }
+  .exp-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(to bottom, var(--accent), var(--accent3));
+  }
+  .exp-card:hover { border-color: var(--accent); }
+  .exp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .exp-role { font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+  .exp-company { font-size: 15px; color: var(--accent2); font-weight: 600; }
+  .exp-date {
+    font-family: 'Fira Code', monospace; font-size: 13px;
+    color: var(--muted); background: var(--border);
+    padding: 6px 14px; border-radius: 20px; white-space: nowrap;
+  }
+  .exp-desc { color: var(--muted); line-height: 1.8; font-size: 15px; }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .tag {
+    font-size: 12px; font-weight: 600;
+    padding: 5px 14px; border-radius: 20px;
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.3);
+    color: var(--accent2);
+  }
+
+  /* ── EDUCATION ── */
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .edu-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 32px;
+    opacity: 0; transform: translateY(20px); transition: all 0.5s;
+  }
+  .edu-card.visible { opacity:1; transform:none; }
+  .edu-card:hover { border-color: var(--accent3); }
+  .edu-icon { font-size: 32px; margin-bottom: 16px; }
+  .edu-degree { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+  .edu-school { font-size: 14px; color: var(--accent3); font-weight: 600; margin-bottom: 10px; }
+  .edu-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--bg2); }
+  .proj-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 36px;
+    opacity: 0; transform: translateY(20px); transition: all 0.5s;
+    height: 100%;
+  }
+  .proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  .proj-card.visible { opacity:1; transform:none; }
+  .proj-card:hover { border-color: var(--accent2); transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+  .proj-icon { font-size: 36px; margin-bottom: 16px; }
+  .proj-name { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+  .proj-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* ── CONTACT ── */
+  #contact { text-align: center; }
+  .contact-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px; max-width: 900px; margin: 0 auto;
+  }
+  .contact-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 32px 24px;
+    text-decoration: none; color: var(--text);
+    transition: all 0.3s;
+    opacity: 0; transform: translateY(20px);
+  }
+  .contact-card.visible { opacity:1; transform:none; }
+  .contact-card:hover { border-color: var(--accent2); transform: translateY(-6px); background: rgba(124,58,237,0.08); }
+  .contact-icon { font-size: 32px; margin-bottom: 14px; }
+  .contact-label { font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .contact-value { font-size: 15px; font-weight: 600; color: var(--white); word-break: break-all; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 30px 60px; text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 13px;
+    font-family: 'Fira Code', monospace;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none} }
+  @keyframes fadeIn { from{opacity:0}to{opacity:1} }
+
+  /* ── MOBILE HAMBURGER ── */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 4px; background: none; border: none;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--text); border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── MEDIA QUERIES ── */
+  @media (max-width: 768px) {
+
+    /* Nav */
+    nav { padding: 16px 24px; }
+    .nav-links {
+      display: none; flex-direction: column; gap: 0;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,10,18,0.98);
+      backdrop-filter: blur(20px);
+      justify-content: center; align-items: center;
+      z-index: 98;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { font-size: 22px; padding: 16px 0; }
+    .hamburger { display: flex; z-index: 99; }
+
+    /* Honest banner */
+    .honest-banner { top: 53px; font-size: 10px; padding: 6px 14px; }
+
+    /* Hero */
+    #hero { padding: 130px 24px 80px; }
+    .hero-name { font-size: clamp(38px, 10vw, 60px); }
+    .hero-title { font-size: 16px; }
+    .hero-desc { font-size: 15px; }
+    .hero-ctas { flex-direction: column; }
+    .btn { justify-content: center; }
+    .hero-scroll { display: none; }
+
+    /* Sections */
+    section { padding: 70px 24px; }
+
+    /* About */
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+
+    /* Skills */
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Exp */
+    .exp-header { flex-direction: column; gap: 12px; }
+    .exp-card { padding: 28px 20px; }
+
+    /* Education */
+    .edu-grid { grid-template-columns: 1fr; }
+
+    /* Projects */
+    .proj-grid { grid-template-columns: 1fr; }
+
+    /* Contact */
+    .contact-grid { grid-template-columns: 1fr 1fr; }
+
+    /* Footer */
+    footer { padding: 24px; font-size: 11px; }
+  }
+
+  @media (max-width: 420px) {
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">PR<span>.</span>dev</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" onclick="closeMenu()">Despre</a></li>
+    <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
+    <li><a href="#experience" onclick="closeMenu()">Experiență</a></li>
+    <li><a href="#education" onclick="closeMenu()">Educație</a></li>
+    <li><a href="#projects" onclick="closeMenu()">Proiecte</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HONEST BANNER -->
+<div class="honest-banner">
+  🤖 Helped by <span>Claude AI</span> — we are not delusional here, transparency matters too.
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">Disponibil pentru oportunități</div>
+    <h1 class="hero-name">
+      Pavel<br><span class="highlight">Ionuț-Robert</span>
+    </h1>
+    <div class="hero-title">
+      <span id="typing-text"></span><span class="cursor"></span>
+    </div>
+    <p class="hero-desc">
+      Developer pasionat de web și tehnologie, cu experiență în HTML, CSS, JavaScript și Python.
+      Am construit site-uri, jocuri interactive și am predat programare copiilor. Mereu gata să învăț ceva nou.
+    </p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn btn-primary">
+        <span>📬</span> Contactează-mă
+      </a>
+      <a href="https://github.com/puvlearobert12" target="_blank" class="btn btn-outline">
+        <span>🐙</span> GitHub
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-tag">// 01. despre mine</div>
+  <h2 class="section-title">Cine sunt</h2>
+  <p class="section-sub">Un developer din Craiova care construiește lucruri cu cod și învață mereu ceva nou.</p>
+
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Salut! Mă numesc Robert și sunt developer web cu o pasiune reală pentru tehnologie și calculatoare. Am început să construiesc site-uri de la zero — HTML, CSS, JavaScript — și nu m-am mai oprit.</p>
+      <p>Am lucrat ca <strong style="color:var(--accent2)">trainer la Logiscool</strong>, unde am predat informatică copiilor cu vârste între 6 și 12 ani. Asta m-a ajutat să înțeleg mai bine nu doar codul, ci și cum să explic concepte complexe simplu și clar.</p>
+      <p>Acum caut o nouă oportunitate unde să cresc, să contribui și să construiesc lucruri care contează.</p>
+
+      <ul class="info-list">
+        <li><span class="label">📍 Locație</span> Craiova, România</li>
+        <li><span class="label">📅 Vârstă</span> 21 ani (21.06.2002)</li>
+        <li><span class="label">🚗 Permis</span> Categoria B</li>
+        <li><span class="label">🌍 Limbi</span> Română & Engleză (nivel înalt)</li>
+        <li><span class="label">📧 Email</span> puvlearobert12@gmail.com</li>
+      </ul>
+    </div>
+
+    <div class="about-stats">
+      <div class="stat-card">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Ani de experiență în web</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Luni trainer Logiscool</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Dorință de a învăța</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Tehnologii stăpânite</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-tag">// 02. tehnologii</div>
+  <h2 class="section-title">Skills</h2>
+  <p class="section-sub">Tehnologiile cu care lucrez și cu care pot aduce valoare din prima zi.</p>
+
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon">🌐</div>
+      <div class="skill-name">HTML</div>
+      <div class="skill-level">Intermediar</div>
+      <div class="skill-bar"><div class="skill-bar-fill" data-width="65"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🎨</div>
+      <div class="skill-name">CSS</div>
+      <div class="skill-level">Intermediar</div>
+      <div class="skill-bar"><div class="skill-bar-fill" data-width="65"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">⚡</div>
+      <div class="skill-name">JavaScript</div>
+      <div class="skill-level">Intermediar-</div>
+      <div class="skill-bar"><div class="skill-bar-fill" data-width="50"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🐍</div>
+      <div class="skill-name">Python</div>
+      <div class="skill-level">În învățare</div>
+      <div class="skill-bar"><div class="skill-bar-fill" data-width="30"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">⚛️</div>
+      <div class="skill-name">React</div>
+      <div class="skill-level">În învățare</div>
+      <div class="skill-bar"><div class="skill-bar-fill" data-width="25"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🎭</div>
+      <div class="skill-name">Photoshop</div>
+      <div class="skill-level">Intermediar</div>
+      <div class="skill-bar"><div class="skill-bar-fill" data-width="65"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🎬</div>
+      <div class="skill-name">Premiere Pro</div>
+      <div class="skill-level">Intermediar</div>
+      <div class="skill-bar"><div class="skill-bar-fill" data-width="60"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🐙</div>
+      <div class="skill-name">Git / GitHub</div>
+      <div class="skill-level">În învățare</div>
+      <div class="skill-bar"><div class="skill-bar-fill" data-width="30"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-tag">// 03. experiență</div>
+  <h2 class="section-title">Unde am lucrat</h2>
+  <p class="section-sub">Experiența reală care m-a format ca developer și comunicator.</p>
+
+  <div class="exp-card">
+    <div class="exp-header">
+      <div>
+        <div class="exp-role">Trainer IT pentru copii</div>
+        <div class="exp-company">Logiscool România</div>
+      </div>
+      <div class="exp-date">3 luni</div>
+    </div>
+    <p class="exp-desc">
+      Am predat informatică și programare copiilor cu vârste între 6 și 12 ani. Am adaptat
+      concepte tehnice complexe într-un format accesibil și distractiv, dezvoltând atât
+      răbdarea cât și capacitatea de a comunica clar. Am creat materiale de predare și am
+      coordonat activități interactive de coding.
+    </p>
+    <div class="exp-tags">
+      <span class="tag">Predare</span>
+      <span class="tag">Programare</span>
+      <span class="tag">Comunicare</span>
+      <span class="tag">Scratch</span>
+      <span class="tag">Lucru cu copii</span>
+    </div>
+  </div>
+
+  <br><br>
+
+  <div class="exp-card" style="transition-delay:0.15s">
+    <div class="exp-header">
+      <div>
+        <div class="exp-role">Proiecte Personale Web</div>
+        <div class="exp-company">Self-taught Developer</div>
+      </div>
+      <div class="exp-date">Ongoing</div>
+    </div>
+    <p class="exp-desc">
+      Am construit site-uri de la zero cu HTML, CSS și JavaScript. Am implementat funcționalități
+      interactive, am creat bloguri și jocuri web. Am obținut certificatul de JavaScript de la
+      freeCodeCamp, confirmând competențele tehnice cu o certificare recunoscută internațional.
+    </p>
+    <div class="exp-tags">
+      <span class="tag">HTML / CSS</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">Jocuri Web</span>
+      <span class="tag">Blog</span>
+      <span class="tag">freeCodeCamp ✓</span>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-tag">// 04. educație</div>
+  <h2 class="section-title">Formare</h2>
+  <p class="section-sub">Fundația academică și certificările care îmi susțin abilitățile tehnice.</p>
+
+  <div class="edu-grid">
+    <div class="edu-card">
+      <div class="edu-icon">🎓</div>
+      <div class="edu-degree">Informatică</div>
+      <div class="edu-school">Universitatea din Craiova — Facultatea de Științe</div>
+      <div class="edu-desc">Profilul Informatică. Studii superioare cu focus pe algoritmică, programare și fundamente ale calculatoarelor.</div>
+    </div>
+    <div class="edu-card" style="transition-delay:0.1s">
+      <div class="edu-icon">🏫</div>
+      <div class="edu-degree">Liceu — Profil Real</div>
+      <div class="edu-school">Colegiul Național Nicolae Titulescu, Craiova</div>
+      <div class="edu-desc">Formare liceală cu profil real, care a pus bazele gândirii analitice și rezolvării problemelor.</div>
+    </div>
+    <div class="edu-card" style="transition-delay:0.2s">
+      <div class="edu-icon">📜</div>
+      <div class="edu-degree">JavaScript Algorithms & Data Structures</div>
+      <div class="edu-school">freeCodeCamp — Certificat</div>
+      <div class="edu-desc">Certificare internațională în JavaScript — variabile, funcții, algoritmi, structuri de date, programare funcțională.</div>
+    </div>
+    <div class="edu-card" style="transition-delay:0.3s">
+      <div class="edu-icon">🌍</div>
+      <div class="edu-degree">Limbi Străine</div>
+      <div class="edu-school">Engleză — Nivel Avansat</div>
+      <div class="edu-desc">Comunicare fluentă în engleză — documentație tehnică, comunicare profesională și colaborare internațională.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-tag">// 05. proiecte</div>
+  <h2 class="section-title">Ce am construit</h2>
+  <p class="section-sub">Proiecte realizate din pasiune și dorința de a învăța prin practică.</p>
+
+  <div class="proj-grid">
+    <div class="proj-card">
+      <div class="proj-icon">🎮</div>
+      <div class="proj-name">Jocuri Interactive Web</div>
+      <p class="proj-desc">Jocuri funcționale construite cu HTML, CSS și JavaScript pur. Focus pe logică, animații și interactivitate în browser.</p>
+      <div class="exp-tags" style="margin-top:20px">
+        <span class="tag">JavaScript</span><span class="tag">Canvas</span><span class="tag">DOM</span>
+      </div>
+    </div>
+    <div class="proj-card" style="transition-delay:0.1s">
+      <div class="proj-icon">📝</div>
+      <div class="proj-name">Bloguri Web</div>
+      <p class="proj-desc">Site-uri de blog cu design responsive, navigare dinamică și conținut structurat, construite de la zero fără framework-uri.</p>
+      <div class="exp-tags" style="margin-top:20px">
+        <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+      </div>
+    </div>
+    <div class="proj-card" style="transition-delay:0.2s">
+      <div class="proj-icon">🌐</div>
+      <div class="proj-name">Site-uri de prezentare</div>
+      <p class="proj-desc">Site-uri complete cu animații, layout responsive și funcționalități JavaScript — de la concept la deployment.</p>
+      <div class="exp-tags" style="margin-top:20px">
+        <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">Animații</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:48px; opacity:0; transform:translateY(20px); transition:all 0.5s;" class="github-link-wrap">
+    <a href="https://github.com/puvlearobert12" target="_blank" class="btn btn-outline" style="font-size:16px; padding:16px 36px;">
+      🐙 &nbsp; Vezi toate proiectele pe GitHub
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-tag" style="text-align:center">// 06. contact</div>
+  <h2 class="section-title" style="text-align:center">Hai să vorbim</h2>
+  <p class="section-sub" style="margin:0 auto 60px; text-align:center">Sunt deschis la oportunități, colaborări sau orice idee interesantă.</p>
+
+  <div class="contact-grid">
+    <a href="mailto:puvlearobert12@gmail.com" class="contact-card">
+      <div class="contact-icon">📧</div>
+      <div class="contact-label">Email</div>
+      <div class="contact-value">puvlearobert12@gmail.com</div>
+    </a>
+    <a href="tel:0784089750" class="contact-card" style="transition-delay:0.1s">
+      <div class="contact-icon">📱</div>
+      <div class="contact-label">Telefon</div>
+      <div class="contact-value">0784 089 750</div>
+    </a>
+    <a href="https://github.com/puvlearobert12" target="_blank" class="contact-card" style="transition-delay:0.2s">
+      <div class="contact-icon">🐙</div>
+      <div class="contact-label">GitHub</div>
+      <div class="contact-value">puvlearobert12</div>
+    </a>
+    <div class="contact-card" style="transition-delay:0.3s">
+      <div class="contact-icon">📍</div>
+      <div class="contact-label">Locație</div>
+      <div class="contact-value">Craiova, România</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span style="color:var(--accent2)">Pavel Ionuț-Robert</span> · construit cu HTML, CSS & JS · <span style="color:var(--accent3)">2026</span>
+</footer>
+
+<script>
+// ── HAMBURGER MENU ────────────────────────────────────────
+function toggleMenu() {
+  const nav = document.getElementById('navLinks');
+  const btn = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('navLinks').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+// ── TYPING EFFECT ──────────────────────────────────────────
+const phrases = [
+  'Web Developer',
+  'JavaScript Enthusiast',
+  'Python Coder',
+  'Creative Problem Solver',
+  'Always Learning...',
+];
+let phraseIdx = 0, charIdx = 0, deleting = false;
+const el = document.getElementById('typing-text');
+
+function type() {
+  const current = phrases[phraseIdx];
+  if (!deleting) {
+    el.textContent = current.slice(0, ++charIdx);
+    if (charIdx === current.length) { deleting = true; setTimeout(type, 2000); return; }
+  } else {
+    el.textContent = current.slice(0, --charIdx);
+    if (charIdx === 0) { deleting = false; phraseIdx = (phraseIdx + 1) % phrases.length; }
+  }
+  setTimeout(type, deleting ? 40 : 80);
+}
+setTimeout(type, 1200);
+
+// ── INTERSECTION OBSERVER (scroll animations) ─────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Skill bars
+      entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width + '%';
+      });
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll(
+  '.section-tag, .section-title, .section-sub, .stat-card, ' +
+  '.about-text p, .info-list li, .skill-card, .exp-card, ' +
+  '.edu-card, .proj-card, .contact-card, .github-link-wrap'
+).forEach(el => observer.observe(el));
+
+// ── NAV scroll effect ──────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.background =
+    window.scrollY > 50 ? 'rgba(10,10,18,0.97)' : 'rgba(10,10,18,0.85)';
+});
+
+// ── PARTICLES background on hero ──────────────────────────
+const canvas = document.createElement('canvas');
+canvas.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:0;opacity:0.4';
+document.getElementById('hero').appendChild(canvas);
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+for (let i = 0; i < 60; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.5 + 0.3,
+    dx: (Math.random() - 0.5) * 0.4,
+    dy: (Math.random() - 0.5) * 0.4,
+    opacity: Math.random() * 0.5 + 0.1,
+  });
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    p.x += p.dx; p.y += p.dy;
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(168,85,247,${p.opacity})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+</script>
+</body>
+</html>
