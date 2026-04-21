@@ -398,48 +398,49 @@
   .nav-links .menu-header {
     display: none;
     font-family: 'Fira Code', monospace;
-    font-size: 13px; color: var(--accent3);
-    letter-spacing: 3px; text-transform: uppercase;
-    margin-bottom: 20px;
+    font-size: 11px; color: var(--accent3);
+    letter-spacing: 4px; text-transform: uppercase;
+    margin-bottom: 32px; opacity: 0.7;
   }
   .nav-links .menu-footer {
     display: none;
-    position: absolute; bottom: 40px;
     font-family: 'Fira Code', monospace;
     font-size: 11px; color: var(--muted);
+    margin-top: 40px; opacity: 0.5;
   }
 
   /* ── MEDIA QUERIES ── */
   @media (max-width: 768px) {
 
     /* Nav */
-    nav { padding: 14px 24px; }
+    nav { padding: 14px 24px; z-index: 200; }
     .nav-links {
       display: none; flex-direction: column; gap: 0;
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(8,8,18,0.97);
-      backdrop-filter: blur(24px);
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100vw; height: 100vh;
+      background: #09091a;
       justify-content: center; align-items: center;
-      z-index: 98;
-      animation: none;
+      z-index: 150;
+      padding: 0;
     }
     .nav-links.open { display: flex; }
     .nav-links.open .menu-header { display: block; }
     .nav-links.open .menu-footer { display: block; }
     .nav-links li {
-      width: 100%; text-align: center;
-      border-bottom: 1px solid var(--border);
+      width: 260px; text-align: center;
     }
-    .nav-links li:first-of-type { border-top: 1px solid var(--border); }
     .nav-links a {
-      font-size: 18px; font-weight: 600;
-      padding: 20px 0; display: block; width: 100%;
-      color: var(--text); letter-spacing: 1px;
-      transition: all 0.2s;
+      font-size: 22px; font-weight: 600;
+      padding: 16px 0; display: block; width: 100%;
+      color: var(--muted); letter-spacing: 0.5px;
+      transition: all 0.2s; text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-    .nav-links a:hover { color: var(--accent2); background: rgba(124,58,237,0.06); }
+    .nav-links li:first-of-type a { border-top: 1px solid rgba(255,255,255,0.05); }
+    .nav-links a:hover, .nav-links a:active { color: var(--accent2); padding-left: 10px; }
     .nav-links a::after { display: none; }
-    .hamburger { display: flex; z-index: 99; }
+    .hamburger { display: flex; z-index: 201; }
 
     /* Honest banner */
     .honest-banner { top: 53px; font-size: 10px; padding: 6px 14px; }
