@@ -382,33 +382,63 @@
 
   /* ── MOBILE HAMBURGER ── */
   .hamburger {
-    display: none; flex-direction: column; gap: 5px;
-    cursor: pointer; padding: 4px; background: none; border: none;
+    display: none; flex-direction: column; gap: 6px;
+    cursor: pointer; padding: 6px; background: none; border: none;
   }
   .hamburger span {
-    display: block; width: 24px; height: 2px;
-    background: var(--text); border-radius: 2px;
-    transition: all 0.3s;
+    display: block; width: 26px; height: 2px;
+    background: var(--accent2); border-radius: 2px;
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
   }
-  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .hamburger.open span:nth-child(2) { opacity: 0; }
-  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+  /* Mobile menu overlay */
+  .nav-links .menu-header {
+    display: none;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px; color: var(--accent3);
+    letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .nav-links .menu-footer {
+    display: none;
+    position: absolute; bottom: 40px;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px; color: var(--muted);
+  }
 
   /* ── MEDIA QUERIES ── */
   @media (max-width: 768px) {
 
     /* Nav */
-    nav { padding: 16px 24px; }
+    nav { padding: 14px 24px; }
     .nav-links {
       display: none; flex-direction: column; gap: 0;
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(10,10,18,0.98);
-      backdrop-filter: blur(20px);
+      background: rgba(8,8,18,0.97);
+      backdrop-filter: blur(24px);
       justify-content: center; align-items: center;
       z-index: 98;
+      animation: none;
     }
     .nav-links.open { display: flex; }
-    .nav-links a { font-size: 22px; padding: 16px 0; }
+    .nav-links.open .menu-header { display: block; }
+    .nav-links.open .menu-footer { display: block; }
+    .nav-links li {
+      width: 100%; text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-links li:first-of-type { border-top: 1px solid var(--border); }
+    .nav-links a {
+      font-size: 18px; font-weight: 600;
+      padding: 20px 0; display: block; width: 100%;
+      color: var(--text); letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent2); background: rgba(124,58,237,0.06); }
+    .nav-links a::after { display: none; }
     .hamburger { display: flex; z-index: 99; }
 
     /* Honest banner */
@@ -463,12 +493,14 @@
 <nav>
   <div class="nav-logo">PR<span>.</span>dev</div>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#about" onclick="closeMenu()">Despre</a></li>
+    <div class="menu-header">// navigare</div>
+    <li><a href="#about" onclick="closeMenu()">Despre mine</a></li>
     <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
     <li><a href="#experience" onclick="closeMenu()">Experiență</a></li>
     <li><a href="#education" onclick="closeMenu()">Educație</a></li>
     <li><a href="#projects" onclick="closeMenu()">Proiecte</a></li>
     <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+    <div class="menu-footer">puvlearobert12.github.io</div>
   </ul>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
     <span></span><span></span><span></span>
